@@ -1,6 +1,9 @@
 const categoryRoutes = require("./routes/categoryRoutes");
 const productRoutes = require("./routes/productRoutes");
 const authRoutes = require("./routes/authRoutes");
+const cartRoutes = require("./routes/cartRoutes");
+
+
 const express = require("express");
 const dotenv = require("dotenv");
 const cors = require("cors");
@@ -20,6 +23,7 @@ app.use(express.json());
 app.use("/api/auth", authRoutes);
 app.use("/api/products", productRoutes);
 app.use("/api/categories", categoryRoutes);
+app.use("/api/cart", cartRoutes);
 
 app.get("/", (req, res) => {
     res.send("E-Commerce API Running...");
