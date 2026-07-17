@@ -1,6 +1,7 @@
 const Cart = require("../models/cart");
 
 //Add Product to Cart
+
 const addToCart = async (req, res) => {
     try {
         const { product, quantity } = req.body;
@@ -43,7 +44,7 @@ const addToCart = async (req, res) => {
 };
 
 //Get Logged In User Cart
-const getCart = async(req, res) => {
+const getCartItems = async(req, res) => {
     try {
         const cart = await Cart.find({
             user: req.user.id,
@@ -63,7 +64,63 @@ const getCart = async(req, res) => {
     }
 };
 
+//Update Cart Quantity
+const updateCartQuantity = async(req, res) => {
+    try {
+        const { quantity } = req.body;
+        const cartItem = await Cart.findById(req.params.id);
+
+        if(!cartItem) {
+            return res.status(404).json({
+                success: false,
+                message: "Cart Item Not Found",
+            });
+        }
+        cartItem.quantity = quantity;
+
+        await cartItem.save();
+
+        res.status(200).json({
+            success: true,
+            message: "Cart Updated Successfully",
+            cart: cartItem,
+        });
+    } catch(error)  {
+        res.status(500).json({
+            success: false,
+            message: error.message,
+        });
+    }
+};
+
+
+//Delete Cart Item
+const deleteCartItem = async(req, res) => {
+    try {
+        const cartItem = await Cart.findById(req.params.id);
+
+        if(!cartItem) {
+            return res.status(404).json({
+                success: false,
+                message: "Cart Item Not Found",
+            });
+        }
+        await cartItem.deleteOne();
+        res.json({
+            success: true,
+            message: "Cart Item Removed Successfully",
+        });
+    } catch(error) {
+        res.status(500).json({
+            success: false,
+            message: error.message,
+        });
+    }
+};
+
 module.exports = {
     addToCart,
-    getCart,
+    getCartItems,
+    updateCartQuantity,
+    deleteCartItem,
 };
