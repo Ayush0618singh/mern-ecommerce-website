@@ -16,7 +16,7 @@ router.post("/", auth, addToCart);
 
 router.get("/", auth, getCartItems);
 
-router.get("/:id", auth, updateCartQuantity);
+router.put("/:id", auth, updateCartQuantity);
 
 router.delete("/:id", auth, deleteCartItem);
 
